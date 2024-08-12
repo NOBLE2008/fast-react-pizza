@@ -10,7 +10,7 @@ function CartItem({ item }) {
         {quantity}&times; {name}
       </p>
       <div className='flex justify-between'>
-        <p className='font-bold'>{formatCurrency(totalPrice)}</p>
+        <p className='font-bold self-end'>{formatCurrency(totalPrice)}</p>
         <Button type='deletesm'>Delete</Button>
       </div>
     </li>

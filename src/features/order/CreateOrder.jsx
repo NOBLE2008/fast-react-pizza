@@ -37,13 +37,12 @@ const fakeCart = [
 function CreateOrder() {
   // const [withPriority, setWithPriority] = useState(false);
   const navigation = useNavigation();
-  const isLoading =
-    navigation.state === 'submitting';
+  const isLoading = navigation.state === 'submitting';
   const path = navigation.formAction;
 
   const formError = useActionData();
   return (
-    <div className="ml-4">
+    <div className="mx-4 my-6">
       {isLoading && path === '/order/new' && <Loader />}
       {!isLoading && navigation.state !== 'loading' && (
         <div className="mx-auto">
@@ -51,38 +50,31 @@ function CreateOrder() {
 
           <Form method="POST" className="flex flex-col items-center">
             <div className="w-full">
-              <label>First Name</label>
+              <label>
+                First Name <span className="text-sm text-red-500">*</span>
+              </label>
               <br />
-              <input
-                type="text"
-                name="customer"
-                required
-                className="input"
-              />
+              <input type="text" name="customer" required className="input" />
             </div>
 
             <div className="w-full">
-              <label>Phone number</label>
+              <label>
+                Phone number <span className="text-sm text-red-500">*</span>
+              </label>
               <div>
-                <input
-                  type="tel"
-                  name="phone"
-                  required
-                  className="input"
-                />
-                {formError?.phone && <p>{formError.phone}</p>}
+                <input type="tel" name="phone" required className="input" />
+                {formError?.phone && (
+                  <p className="text-xs text-red-500">{formError.phone}</p>
+                )}
               </div>
             </div>
 
             <div className="w-full">
-              <label>Address</label>
+              <label>
+                Address <span className="text-sm text-red-500">*</span>
+              </label>
               <div>
-                <input
-                  type="text"
-                  name="address"
-                  required
-                  className="input"
-                />
+                <input type="text" name="address" required className="input" />
               </div>
             </div>
 
