@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 import { createOrder } from '../../services/apiRestaurant';
 import Loader from '../../ui/Loader';
@@ -41,14 +41,18 @@ function CreateOrder() {
   const path = navigation.formAction;
 
   const formError = useActionData();
+
+  const input = useRef();
   return (
     <div className="mx-4 my-6">
       {isLoading && path === '/order/new' && <Loader />}
       {!isLoading && navigation.state !== 'loading' && (
         <div className="mx-auto">
-          <h2 className="text-center font-bold mb-6">Ready to order? Let's go!</h2>
+          <h2 className="mb-6 text-center font-bold">
+            Ready to order? Let's go!
+          </h2>
 
-          <Form method="POST" className="flex flex-col space-y-3 items-center">
+          <Form method="POST" className="flex flex-col items-center space-y-3">
             <div className="w-full">
               <label>
                 First Name <span className="text-sm text-red-600">*</span>
@@ -62,9 +66,22 @@ function CreateOrder() {
                 Phone number <span className="text-sm text-red-600">*</span>
               </label>
               <div>
-                <input type="tel" name="phone" required className="input" />
+                <input
+                  type="tel"
+                  name="phone"
+                  required
+                  className="input"
+                  ref={input}
+                />
                 {formError?.phone && (
-                  <p className="text-xs text-red-600 p-1.5 bg-red-100 mt-2 rounded-lg">{formError.phone}</p>
+                  <p
+                    className="mt-2 rounded-lg bg-red-100 p-1.5 text-xs text-red-600"
+                    onClick={() => {
+                      input.current.focus();
+                    }}
+                  >
+                    {formError.phone}
+                  </p>
                 )}
               </div>
             </div>

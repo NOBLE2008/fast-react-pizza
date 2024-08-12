@@ -63,15 +63,15 @@ function Order() {
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
-    <div>
+    <div className="px-4 py-6 space-y-6">
       {isLoading && <Loader />}
       {!isLoading && (
         <>
-          <h2>Status</h2>
+          <h2 className="font-bold">Order #{id} Status</h2>
 
           <div>
             {priority && <span>Priority</span>}
-            <span>{status} order</span>
+            <span> {status} order</span>
           </div>
 
           <div>
