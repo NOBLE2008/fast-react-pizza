@@ -51,7 +51,7 @@ function CreateOrder() {
           <Form method="POST" className="flex flex-col space-y-3 items-center">
             <div className="w-full">
               <label>
-                First Name <span className="text-sm text-red-500">*</span>
+                First Name <span className="text-sm text-red-600">*</span>
               </label>
               <br />
               <input type="text" name="customer" required className="input" />
@@ -59,19 +59,19 @@ function CreateOrder() {
 
             <div className="w-full">
               <label>
-                Phone number <span className="text-sm text-red-500">*</span>
+                Phone number <span className="text-sm text-red-600">*</span>
               </label>
               <div>
                 <input type="tel" name="phone" required className="input" />
                 {formError?.phone && (
-                  <p className="text-xs text-red-500">{formError.phone}</p>
+                  <p className="text-xs text-red-600 p-1.5 bg-red-100 mt-2 rounded-lg">{formError.phone}</p>
                 )}
               </div>
             </div>
 
             <div className="w-full">
               <label>
-                Address <span className="text-sm text-red-500">*</span>
+                Address <span className="text-sm text-red-600">*</span>
               </label>
               <div>
                 <input type="text" name="address" required className="input" />
