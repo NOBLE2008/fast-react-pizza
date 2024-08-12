@@ -46,9 +46,9 @@ function CreateOrder() {
       {isLoading && path === '/order/new' && <Loader />}
       {!isLoading && navigation.state !== 'loading' && (
         <div className="mx-auto">
-          <h2 className="text-center">Ready to order? Let's go!</h2>
+          <h2 className="text-center font-bold mb-6">Ready to order? Let's go!</h2>
 
-          <Form method="POST" className="flex flex-col items-center">
+          <Form method="POST" className="flex flex-col space-y-3 items-center">
             <div className="w-full">
               <label>
                 First Name <span className="text-sm text-red-500">*</span>
