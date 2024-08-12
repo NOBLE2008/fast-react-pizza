@@ -1,0 +1,11 @@
+::-webkit-scrollbar {
+  /* Customize the scrollbar width */
+  width: 4px;
+  background-color: auto;
+}
+
+::-webkit-scrollbar-thumb {
+  /* Customize the scrollbar thumb */
+  background-color: gray;
+  border-radius: 9999px;
+}
