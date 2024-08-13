@@ -34,14 +34,8 @@ function Cart() {
   const cart = useSelector((state) => {
     return state.cart.cart;
   });
-  console.log(cart)
-  const navigate = useNavigate();
   const dispatch = useDispatch()
 
-  const username = useSelector((state) => state.user.username);
-  useEffect(() => {
-    if (username === '') navigate('/');
-  }, [username, navigate]);
   return (
     <div className="mx-5 h-full py-4">
       <Link

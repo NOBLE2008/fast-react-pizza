@@ -50,13 +50,6 @@ function CreateOrder() {
 
   const formError = useActionData();
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (username === '') navigate('/', {
-      replace: true,
-    });
-  }, [username, navigate]);
 
   const input = useRef();
   return (

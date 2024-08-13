@@ -6,11 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function Menu() {
   const menu = useLoaderData();
-  const navigate = useNavigate();
-  const username = useSelector((state) => state.user.username);
-  useEffect(() => {
-    if (username === '') navigate('/');
-  }, [username, navigate]);
+
   return (
     <ul className="space-y-2 divide-y-2 px-4">
       {menu.map((item) => {

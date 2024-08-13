@@ -52,11 +52,6 @@ function Order() {
   const order = useLoaderData()
   const isLoading = navigation.state === 'loading';
 
-  const navigate = useNavigate();
-  const username = useSelector((state) => state.user.username)
-  useEffect(() => {
-    if (username === '') navigate('/');
-  }, [username, navigate]);
 
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const {

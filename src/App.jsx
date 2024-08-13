@@ -9,6 +9,7 @@ import CreateOrder, {
 } from './features/order/CreateOrder';
 import Order, { loader as orderLoader } from './features/order/Order';
 import AppLayout from './ui/AppLayout';
+import ProtectedRoute from './ui/ProtectedRoute';
 
 function App() {
   const router = createBrowserRouter([
@@ -29,16 +30,28 @@ function App() {
         },
         {
           path: '/cart',
-          element: <Cart />,
+          element: (
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          ),
         },
         {
           path: '/order/new',
-          element: <CreateOrder />,
+          element: (
+            <ProtectedRoute>
+              <CreateOrder />
+            </ProtectedRoute>
+          ),
           action: orderAction,
         },
         {
           path: '/order/:orderId',
-          element: <Order />,
+          element: (
+            <ProtectedRoute>
+              <Order />
+            </ProtectedRoute>
+          ),
           loader: orderLoader,
           errorElement: <Error />,
         },
