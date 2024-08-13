@@ -35,6 +35,7 @@ function Cart() {
     return state.cart.cart;
   });
   const dispatch = useDispatch()
+  const username = useSelector((state) => state.user.username)
 
   return (
     <div className="mx-5 h-full py-4">

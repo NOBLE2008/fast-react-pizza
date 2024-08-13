@@ -1,11 +1,12 @@
 import React from 'react';
 import Header from './Header';
-import CartOverview from '../features/cart/CartOverview';
-import { Outlet, useNavigation } from 'react-router-dom';
+import CartOverview from './Footer';
+import { Outlet, useLocation, useNavigation } from 'react-router-dom';
 import Loader from './Loader';
 
 export default function AppLayout() {
   const navigation = useNavigation();
+  const location = useLocation()
   const isLoading = navigation.state === 'loading';
   const path = navigation?.location?.pathname;
   return (
@@ -17,7 +18,7 @@ export default function AppLayout() {
           <Outlet />
         </main>}
       </div>
-      <CartOverview />
+      {<CartOverview />}
     </div>
   );
 }
