@@ -18,7 +18,6 @@ const cartSlice = createSlice({
             totalPrice: item.totalPrice + Number(item.unitPrice),
           };
         } else {
-          console.log('done');
           return item;
         }
       });
@@ -27,11 +26,8 @@ const cartSlice = createSlice({
       const index = state.cart.findIndex(
         (item) => item.pizzaId === action.payload,
       );
-      if (state.cart[index].quantity <= 1) {
-        state.cart = state.cart.filter((item) => {
-          return action.payload !== item.pizzaId;
-        });
-      }
+      if (state.cart[index].quantity <= 1)
+        cartSlice.caseReducers.removeItem(state, action);
       state.cart = state.cart.map((item) => {
         if (item.pizzaId === action.payload) {
           if (item.quantity > 1) {
@@ -65,3 +61,10 @@ export const {
   clearCart,
 } = cartSlice.actions;
 export default cartSlice.reducer;
+
+export const getTotalCartPrice = (state) =>
+  state.cart.cart.reduce((total, item) => total + item.totalPrice, 0);
+
+export const getCartCount = (state) => {
+  return state.cart.cart.length;
+};

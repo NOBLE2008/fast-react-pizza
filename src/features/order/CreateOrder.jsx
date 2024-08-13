@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   Form,
+  Link,
   redirect,
   useActionData,
   useNavigate,
@@ -10,6 +11,9 @@ import { createOrder } from '../../services/apiRestaurant';
 import Loader from '../../ui/Loader';
 import Button from '../../ui/Button';
 import { useSelector } from 'react-redux';
+import store from '../../store';
+import { clearCart } from '../cart/cartSlice';
+import { formatCurrency } from '../../utils/helpers';
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -17,41 +21,50 @@ const isValidPhone = (str) =>
     str,
   );
 
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: 'Mediterranean',
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: 'Vegetale',
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: 'Spinach and Mushroom',
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
-
 function CreateOrder() {
-  // const [withPriority, setWithPriority] = useState(false);
+  const [withPriority, setWithPriority] = useState(false);
   const username = useSelector((state) => state.user.username);
   const navigation = useNavigation();
   const isLoading = navigation.state === 'submitting';
   const path = navigation.formAction;
+  const cart = useSelector((state) => state.cart.cart);
+  const [totalPrice, setTotalPrice] = useState(function () {
+    return cart.reduce((prev, cur) => prev + cur.totalPrice, 0);
+  });
 
   const formError = useActionData();
 
+  useEffect(() => {
+    if (withPriority) {
+      setTotalPrice((cur) => {
+        return cur + cur * 0.2;
+      });
+    }else{
+      setTotalPrice((cur) => {
+       return cart.reduce((prev, cur) => prev + cur.totalPrice, 0);
+      });
+    }
+  }, [withPriority, cart])
+  const handleClick = () => {
+    setWithPriority((cur) => {
+      return !cur;
+    });
+  };
 
   const input = useRef();
+  if (cart.length <= 0) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-2">
+        <h2 className="text-2xl font-semibold">Your cart is empty</h2>
+        <Link
+          to="/menu"
+          className="text-blue-500 hover:text-blue-600 hover:underline sm:text-base"
+        >
+          &larr; Back to menu
+        </Link>
+      </div>
+    );
+  }
   return (
     <div className="mx-4 my-6">
       {isLoading && path === '/order/new' && <Loader />}
@@ -112,6 +125,7 @@ function CreateOrder() {
 
             <div>
               <input
+                onClick={handleClick}
                 type="checkbox"
                 name="priority"
                 id="priority"
@@ -125,13 +139,13 @@ function CreateOrder() {
             </div>
 
             <div>
-              <Button>Order Now</Button>
+            <Button>Order Now: {formatCurrency(totalPrice)}</Button>
             </div>
             <input
               type="text"
               hidden
               name="cart"
-              value={JSON.stringify(fakeCart)}
+              value={JSON.stringify(cart)}
             />
           </Form>
         </div>
@@ -153,6 +167,8 @@ export async function action({ request }) {
     cart: JSON.parse(data.cart),
     priority: data?.priority === 'on',
   });
+
+  store.dispatch(clearCart());
 
   return redirect(`/order/${newOrder.id}`);
 }

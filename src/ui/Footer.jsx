@@ -1,18 +1,16 @@
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { formatCurrency } from '../utils/helpers';
+import { getCartCount, getTotalCartPrice } from '../features/cart/cartSlice';
 
 function CartOverview() {
   const username = useSelector((state) => {
     return state.user.username;
   });
 
-  const { cart } = useSelector((state) => {
-    return state.cart;
-  });
+  const totalProduct = useSelector(getCartCount)
 
-  const totalProduct = cart.length;
-  const productPrice = cart.reduce((prev, cur) => prev + cur.totalPrice, 0);
+  const totalPrice = useSelector(getTotalCartPrice)
 
   const location = useLocation();
   return (
@@ -22,9 +20,7 @@ function CartOverview() {
           {totalProduct > 0 ? totalProduct : 'No'}{' '}
           {totalProduct > 1 ? 'Pizzas' : 'Pizza'}
         </span>
-        {totalProduct > 0 && (
-          <span>{formatCurrency(String(productPrice))}</span>
-        )}
+        {totalProduct > 0 && <span>{formatCurrency(String(totalPrice))}</span>}
       </p>
       {username && (
         <Link
