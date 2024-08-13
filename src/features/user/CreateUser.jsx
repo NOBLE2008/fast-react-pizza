@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import Button from '../../ui/Button';
 import { Link, redirect } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { updateUser } from './userSlice';
 
 function CreateUser() {
+  const dispatch = useDispatch()
   const [username, setUsername] = useState('');
 
   function handleSubmit(e) {
     e.preventDefault();
+    if(!username) throw new Error('Username must be provided')
+    dispatch(updateUser({payload: username}))
   }
 
   return (

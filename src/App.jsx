@@ -36,6 +36,7 @@ function App() {
         {
           path: "/order/:orderId",
           element: <Order />,
+          loader: orderLoader,
           errorElement: <Error />,
         },
       ],
