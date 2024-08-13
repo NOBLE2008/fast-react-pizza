@@ -10,38 +10,45 @@ const cartSlice = createSlice({
       state.cart.push(action.payload);
     },
     incrementCart(state, action) {
-      console.log(action.payload)
-     state.cart =  state.cart.map((item) => {
+      state.cart = state.cart.map((item) => {
         if (item.pizzaId === action.payload) {
           return {
             ...item,
             quantity: item.quantity + 1,
             totalPrice: item.totalPrice + Number(item.unitPrice),
           };
-        }else{
-          console.log('done')
+        } else {
+          console.log('done');
           return item;
         }
       });
     },
     decrementCart(state, action) {
-      const item = state.cart.find((c) => c.pizzaId === action.payload);
-      const index = state.cart.findIndex((c) => c.pizzaId === action.payload);
-      if (item.id === action.payload) {
-        if (item.quantity > 1) {
-          item.totalPrice = item.totalPrice - Number(item.unitPrice);
-          item.quantity -= 1;
-        } else {
-          state.cart = state.cart.filter((item) => {
-            return action.payload !== item.id;
-          });
-        }
+      const index = state.cart.findIndex(
+        (item) => item.pizzaId === action.payload,
+      );
+      if (state.cart[index].quantity <= 1) {
+        state.cart = state.cart.filter((item) => {
+          return action.payload !== item.pizzaId;
+        });
       }
-      state.cart[index] = item;
+      state.cart = state.cart.map((item) => {
+        if (item.pizzaId === action.payload) {
+          if (item.quantity > 1) {
+            return {
+              ...item,
+              quantity: item.quantity - 1,
+              totalPrice: item.totalPrice - Number(item.unitPrice),
+            };
+          }
+        } else {
+          return item;
+        }
+      });
     },
     removeItem(state, action) {
       state.cart = state.cart.filter((item) => {
-        return action.payload !== item.id;
+        return action.payload !== item.pizzaId;
       });
     },
     clearCart(state, action) {
