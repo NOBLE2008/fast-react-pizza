@@ -1,15 +1,16 @@
 // Test ID: IIDSAT
 
-import { useLoaderData, useNavigation } from 'react-router-dom';
+import { useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
 import {
   calcMinutesLeft,
   formatCurrency,
   formatDate,
 } from '../../utils/helpers';
 import { getOrder } from '../../services/apiRestaurant';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Loader from '../../ui/Loader';
 import OrderItem from './OrderItem';
+import { useSelector } from 'react-redux';
 
 const order = {
   id: 'ABCDEF',
@@ -50,6 +51,12 @@ function Order() {
   const navigation = useNavigation();
   const order = useLoaderData()
   const isLoading = navigation.state === 'loading';
+
+  const navigate = useNavigate();
+  const username = useSelector((state) => state.user.username)
+  useEffect(() => {
+    if (username === '') navigate('/');
+  }, [username, navigate]);
 
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
   const {

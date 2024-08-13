@@ -1,8 +1,15 @@
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../ui/Button';
 import { formatCurrency } from '../../utils/helpers';
+import { addToCart } from '../cart/cartSlice';
+import { useNavigate } from 'react-router-dom';
 
 function MenuItem({ pizza }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+  const cart = useSelector((state) => state.cart.cart)
+  const navigate = useNavigate()
+  const isInCart = cart.find((item) => item.pizzaId === id)
+  const dispatch = useDispatch()
 
   return (
     <li className="flex gap-4">
@@ -23,7 +30,23 @@ function MenuItem({ pizza }) {
             ) : (
               <p className="uppercase text-stone-500">Sold out</p>
             )}
-            <Button type="secondary">Add to Cart</Button>
+            {
+              isInCart ? <Button type='small' onClick={() => {
+                navigate(`/cart`)
+              }}>
+                Go to Cart
+              </Button> : <Button type="small" onClick={() => {
+                // Add to cart logic
+                dispatch(addToCart({
+                  pizzaId: id,
+                  name,
+                  quantity: 1,
+                  unitPrice,
+                  totalPrice: unitPrice,
+                }))
+              }}>Add to Cart</Button>
+            }
+            
           </div>
         </div>
       </div>

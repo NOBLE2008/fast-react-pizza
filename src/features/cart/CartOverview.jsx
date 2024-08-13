@@ -7,7 +7,7 @@ function CartOverview() {
         <span>23 pizzas</span>
         <span>$23.45</span>
       </p>
-      <Link to={'/cart#header'} className="text-stone-200">
+      <Link to={'/cart'} className="text-stone-200 active:underline active:font-bold">
         Open cart &rarr;
       </Link>
     </div>

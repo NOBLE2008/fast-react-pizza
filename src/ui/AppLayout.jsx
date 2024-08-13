@@ -13,7 +13,7 @@ export default function AppLayout() {
       {isLoading && path === '/menu' && <Loader />}
       <Header />
       <div>
-        {!isLoading && <main className="mx-auto max-w-3xl">
+        {!isLoading && <main className="mx-auto max-w-3xl h-full">
           <Outlet />
         </main>}
       </div>

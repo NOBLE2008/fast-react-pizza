@@ -1,11 +1,18 @@
-import { useLoaderData } from "react-router-dom";
-import { getMenu } from "../../services/apiRestaurant";
-import MenuItem from "./MenuItem";
+import { useLoaderData, useNavigate } from 'react-router-dom';
+import { getMenu } from '../../services/apiRestaurant';
+import MenuItem from './MenuItem';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Menu() {
   const menu = useLoaderData();
+  const navigate = useNavigate();
+  const username = useSelector((state) => state.user.username);
+  useEffect(() => {
+    if (username === '') navigate('/');
+  }, [username, navigate]);
   return (
-    <ul className="px-4 divide-y-2 space-y-2">
+    <ul className="space-y-2 divide-y-2 px-4">
       {menu.map((item) => {
         return <MenuItem pizza={item} key={item.id} />;
       })}
