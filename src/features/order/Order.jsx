@@ -1,6 +1,6 @@
 // Test ID: IIDSAT
 
-import { useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
+import { useFetcher, useLoaderData, useNavigate, useNavigation } from 'react-router-dom';
 import {
   calcMinutesLeft,
   formatCurrency,
@@ -49,8 +49,19 @@ const order = {
 
 function Order() {
   const navigation = useNavigation();
+  const [fetched, setFetched] = useState(0)
+  const fetcher = useFetcher()
   const order = useLoaderData()
   const isLoading = navigation.state === 'loading';
+
+  useEffect(() => {
+    if(!fetcher?.data && fetched === 0){
+      setFetched((f) => {
+        return f + 1
+      })
+      fetcher.load('/menu')
+    }
+  }, [fetcher, fetched])
 
 
   // Everyone can search for all orders, so for privacy reasons we're gonna gonna exclude names or address, these are only for the restaurant staff
@@ -98,7 +109,9 @@ function Order() {
 
           <ul className="divide-y-2">
             {order.cart.map((item, i) => {
-              return <OrderItem item={item} key={i} />;
+              return <OrderItem item={item} key={i} ingredients={fetcher.data?.find((pizza) => {
+                return pizza.id === item.pizzaId
+              }).ingredients} isLoadingIngredients={fetcher?.data ? false: true}/>;
             })}
           </ul>
 
