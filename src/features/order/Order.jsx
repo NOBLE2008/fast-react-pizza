@@ -79,7 +79,6 @@ function Order() {
     priorityPrice,
     orderPrice,
     estimatedDelivery,
-    cart,
   } = order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
