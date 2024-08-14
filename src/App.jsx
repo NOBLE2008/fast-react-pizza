@@ -5,9 +5,9 @@ import Error from './ui/Error';
 import Menu, { loader as menuLoader } from './features/menu/Menu';
 import Cart from './features/cart/Cart';
 import CreateOrder, {
-  action as orderAction,
+  action as newOrderAction,
 } from './features/order/CreateOrder';
-import Order, { loader as orderLoader } from './features/order/Order';
+import Order, { action as orderAction, loader as orderLoader } from './features/order/Order';
 import AppLayout from './ui/AppLayout';
 import ProtectedRoute from './ui/ProtectedRoute';
 
@@ -43,7 +43,7 @@ function App() {
               <CreateOrder />
             </ProtectedRoute>
           ),
-          action: orderAction,
+          action: newOrderAction,
         },
         {
           path: '/order/:orderId',
@@ -54,6 +54,7 @@ function App() {
           ),
           loader: orderLoader,
           errorElement: <Error />,
+          action: orderAction
         },
       ],
     },
