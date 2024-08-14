@@ -10,10 +10,12 @@ import {
 import { createOrder } from '../../services/apiRestaurant';
 import Loader from '../../ui/Loader';
 import Button from '../../ui/Button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import store from '../../store';
 import { clearCart } from '../cart/cartSlice';
 import { formatCurrency } from '../../utils/helpers';
+import { getAddress } from '../../services/apiGeocoding';
+import { fetchAddress } from '../user/userSlice';
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -23,8 +25,11 @@ const isValidPhone = (str) =>
 
 function CreateOrder() {
   const [withPriority, setWithPriority] = useState(false);
-  const username = useSelector((state) => state.user.username);
+  const { username, address, error, state } = useSelector(
+    (state) => state.user,
+  );
   const navigation = useNavigation();
+  const [location, setLocation] = useState('');
   const isLoading = navigation.state === 'submitting';
   const path = navigation.formAction;
   const cart = useSelector((state) => state.cart.cart);
@@ -32,6 +37,7 @@ function CreateOrder() {
     return cart.reduce((prev, cur) => prev + cur.totalPrice, 0);
   });
 
+  const dispatch = useDispatch();
   const formError = useActionData();
 
   useEffect(() => {
@@ -39,17 +45,21 @@ function CreateOrder() {
       setTotalPrice((cur) => {
         return cur + cur * 0.2;
       });
-    }else{
+    } else {
       setTotalPrice((cur) => {
-       return cart.reduce((prev, cur) => prev + cur.totalPrice, 0);
+        return cart.reduce((prev, cur) => prev + cur.totalPrice, 0);
       });
     }
-  }, [withPriority, cart])
+  }, [withPriority, cart]);
   const handleClick = () => {
     setWithPriority((cur) => {
       return !cur;
     });
   };
+
+  useEffect(() => {
+    setLocation(address);
+  }, [address]);
 
   const input = useRef();
   if (cart.length <= 0) {
@@ -119,7 +129,38 @@ function CreateOrder() {
                 Address <span className="text-sm text-red-600">*</span>
               </label>
               <div>
-                <input type="text" name="address" required className="input" />
+                <div className='relative flex'>
+                  <input
+                    type="text"
+                    name="address"
+                    required
+                    className="input"
+                    value={location}
+                    onChange={(e) => {
+                      setLocation(e.target.value);
+                    }}
+                  />
+                  <Button
+                    className={'absolute bottom-[2px] right-[2px] z-30 text-sm'}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (state === 'idle') dispatch(fetchAddress());
+                    }}
+                  >
+                    {state === 'idle' ? 'Get Position' : 'Getting Position...'}
+                  </Button>
+                </div>
+
+                {error && (
+                  <p
+                    className="mt-2 rounded-lg bg-red-100 p-1.5 text-xs text-red-600"
+                    onClick={() => {
+                      input.current.focus();
+                    }}
+                  >
+                    {error}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -139,12 +180,13 @@ function CreateOrder() {
             </div>
 
             <div>
-            <Button>Order Now: {formatCurrency(totalPrice)}</Button>
+              <Button>Order Now: {formatCurrency(totalPrice)}</Button>
             </div>
             <input
               type="text"
               hidden
               name="cart"
+              readOnly={true}
               value={JSON.stringify(cart)}
             />
           </Form>
